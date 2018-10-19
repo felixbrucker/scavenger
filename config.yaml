@@ -15,6 +15,7 @@ url: 'http://wallet.dev.burst-test.net:6876'   # testnet wallet
 hdd_reader_thread_count: 0            # default 0 (=number of disks)
 hdd_use_direct_io: true               # default true
 hdd_wakeup_after: 240                 # default 240s
+use_dirs_as_drives: false             # default false
 
 cpu_worker_thread_count: 4            # default 4 (0=GPU only)
 cpu_nonces_per_cache: 65536           # default 65536

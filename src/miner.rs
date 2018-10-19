@@ -110,11 +110,12 @@ fn scan_plots(
     plot_dirs: &[String],
     use_direct_io: bool,
     dummy: bool,
+    use_dirs_as_drives: bool,
 ) -> (HashMap<String, Arc<Mutex<Vec<RwLock<Plot>>>>>, u64) {
     let mut drive_id_to_plots: HashMap<String, Arc<Mutex<Vec<RwLock<Plot>>>>> = HashMap::new();
     let mut global_capacity: u64 = 0;
 
-    for plot_dir_str in plot_dirs {
+    for (i, plot_dir_str) in plot_dirs.iter().enumerate() {
         let dir = Path::new(plot_dir_str);
 
         if !dir.exists() {
@@ -132,7 +133,12 @@ fn scan_plots(
             let file = &file.unwrap().path();
 
             if let Ok(p) = Plot::new(file, use_direct_io, dummy) {
-                let drive_id = get_device_id(&file.to_str().unwrap().to_string());
+                let drive_id: String;
+                if use_dirs_as_drives {
+                    drive_id = (i + 1).to_string();
+                } else {
+                    drive_id = get_device_id(&file.to_str().unwrap().to_string());
+                }
                 let plots = drive_id_to_plots
                     .entry(drive_id)
                     .or_insert_with(|| Arc::new(Mutex::new(Vec::new())));
@@ -171,6 +177,7 @@ impl Miner {
             &cfg.plot_dirs,
             cfg.hdd_use_direct_io,
             cfg.benchmark_only.to_uppercase() == "XPU",
+            cfg.use_dirs_as_drives,
         );
 
         let reader_thread_count = if cfg.hdd_reader_thread_count == 0 {

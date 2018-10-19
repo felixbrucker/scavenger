@@ -84,6 +84,9 @@ pub struct Cfg {
 
     #[serde(default = "default_benchmark_only")]
     pub benchmark_only: String,
+
+    #[serde(default = "default_use_dirs_as_drives")]
+    pub use_dirs_as_drives: bool,
 }
 
 fn default_secret_phrase() -> HashMap<u64, String> {
@@ -184,6 +187,10 @@ fn default_show_drive_stats() -> bool {
 
 fn default_benchmark_only() -> String {
     "disabled".to_owned()
+}
+
+fn default_use_dirs_as_drives() -> bool {
+    false
 }
 
 pub fn load_cfg(config: &str) -> Cfg {
