@@ -291,6 +291,7 @@ impl Miner {
                 core.handle(),
                 total_size as usize * 4096 / 1024 / 1024 / 1024,
                 cfg.send_proxy_details,
+                cfg.send_user_agent,
             ),
             state: Arc::new(Mutex::new(State {
                 height: 0,

@@ -87,6 +87,9 @@ pub struct Cfg {
 
     #[serde(default = "default_use_dirs_as_drives")]
     pub use_dirs_as_drives: bool,
+
+    #[serde(default = "default_send_user_agent")]
+    pub send_user_agent: bool,
 }
 
 fn default_secret_phrase() -> HashMap<u64, String> {
@@ -191,6 +194,10 @@ fn default_benchmark_only() -> String {
 
 fn default_use_dirs_as_drives() -> bool {
     false
+}
+
+fn default_send_user_agent() -> bool {
+    true
 }
 
 pub fn load_cfg(config: &str) -> Cfg {

@@ -27,6 +27,7 @@ pub struct RequestHandler {
     ua: String,
     total_size_gb: usize,
     send_proxy_details: bool,
+    send_user_agent: bool,
 }
 
 pub enum FetchError {
@@ -128,6 +129,7 @@ impl RequestHandler {
         handle: Handle,
         total_size_gb: usize,
         send_proxy_details: bool,
+        send_user_agent: bool,
     ) -> RequestHandler {
         for secret_phrase in secret_phrases.values_mut() {
             *secret_phrase = byte_serialize(secret_phrase.as_bytes()).collect();
@@ -144,11 +146,12 @@ impl RequestHandler {
             ua: "scavenger/".to_owned() + crate_version!(),
             total_size_gb,
             send_proxy_details,
+            send_user_agent,
         }
     }
 
     pub fn get_mining_info(&self) -> Box<Future<Item = MiningInfo, Error = FetchError>> {
-        Box::new(self.do_req(self.get_req("/burst?requestType=getMiningInfo")))
+        Box::new(self.do_req(self.post_req("/burst?requestType=getMiningInfo")))
     }
 
     pub fn submit_nonce(
@@ -234,10 +237,12 @@ impl RequestHandler {
     }
 
     fn post_req(&self, path: &str) -> Request<hyper::Body> {
+        let mut request = Request::post(self.uri_for(path));
+        if self.send_user_agent {
+            request.header("User-Agent", self.ua.to_owned());
+        }
         if self.send_proxy_details {
-            Request::post(self.uri_for(path))
-                .header("User-Agent", self.ua.to_owned())
-                .header("X-Capacity", self.total_size_gb)
+            request.header("X-Capacity", self.total_size_gb)
                 .header("X-Miner", self.ua.to_owned())
                 .header(
                     "X-Minername",
@@ -246,21 +251,10 @@ impl RequestHandler {
                     "X-Plotfile",
                     "ScavengerProxy/".to_owned()
                         + &*hostname::get_hostname().unwrap_or("".to_owned()),
-                ).body(hyper::Body::empty())
-                .unwrap()
-        } else {
-            Request::post(self.uri_for(path))
-                .header("User-Agent", self.ua.to_owned())
-                .body(hyper::Body::empty())
-                .unwrap()
+                );
         }
-    }
 
-    fn get_req(&self, path: &str) -> Request<hyper::Body> {
-        Request::get(self.uri_for(path))
-            .header("User-Agent", self.ua.to_owned())
-            .body(hyper::Body::empty())
-            .unwrap()
+        request.body(hyper::Body::empty()).unwrap()
     }
 
     fn do_req<T: DeserializeOwned>(
