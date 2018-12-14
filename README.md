@@ -8,12 +8,26 @@
 - windows, linux, macOS, android & more
 - x86 32 & 64bit, arm, aarch64 
 - direct io
-- avx512f, avx2, avx, sse
+- avx512f, avx2, avx, sse, neon
 - opencl
 - fastest burstminer there is
 
-### Requirements
-- new version of rust
+### Documentation/Wiki
+
+https://github.com/PoC-Consortium/scavenger/wiki
+
+### Binary + source code releases
+
+https://github.com/PoC-Consortium/scavenger/releases
+
+Scavenger can also be installed directly via cargo:
+
+``` shell
+cargo install scavenger
+```
+
+### Development Requirements
+- new version of rust, stable toolchain
 
 ### Compile, test, ...
 
@@ -52,7 +66,7 @@ https://github.com/PoC-Consortium/scavenger/blob/master/config.yaml
 
 ### Docker
 
-A docker image based on alpine linux is built automatically on every commit to master: `burstcoin/scavenger`
+A docker image based on alpine linux is built automatically on every commit to master: `pocconsortium/scavenger`
 This image will use only your cpu.
 
 To run it on the fly use something like this:
@@ -62,7 +76,7 @@ docker run \
 --name scavenger \
 --volume /path/to/your/config.yaml:/data/config.yaml \
 --volume /path/to/your/disks:/disks \
-burstcoin/scavenger
+pocconsortium/scavenger
 ```
 
 Alternatively a docker compose file could look like this:
@@ -70,7 +84,7 @@ Alternatively a docker compose file could look like this:
 version: '2'
 services:
   scavenger:
-    image: burstcoin/scavenger
+    image: pocconsortium/scavenger
     restart: always
     volumes:
       - /path/to/your/disks:/disks
