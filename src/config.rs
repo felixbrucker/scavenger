@@ -93,6 +93,15 @@ pub struct Cfg {
 
     #[serde(default = "default_send_user_agent")]
     pub send_user_agent: bool,
+
+    #[serde(default = "default_multi_chain")]
+    pub multi_chain: bool,
+
+    #[serde(default = "default_maximum_fork_difference")]
+    pub maximum_fork_difference: u64,
+
+    #[serde(default = "default_minimum_block_height")]
+    pub minimum_block_height: u64,
 }
 
 fn default_secret_phrase() -> HashMap<u64, String> {
@@ -205,6 +214,18 @@ fn default_use_dirs_as_drives() -> bool {
 
 fn default_send_user_agent() -> bool {
     true
+}
+
+fn default_multi_chain() -> bool {
+    false
+}
+
+fn default_maximum_fork_difference() -> u64 {
+    1440
+}
+
+fn default_minimum_block_height() -> u64 {
+    500000
 }
 
 pub fn load_cfg(config: &str) -> Cfg {
