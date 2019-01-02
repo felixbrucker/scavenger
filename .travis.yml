@@ -18,12 +18,10 @@ matrix:
       env:
         - CC=gcc-7
         - CXX=g++-7
-      script:
-        - cargo build --release --features=simd
-        - cargo build --release --features=opencl,simd
     - os: windows
-      script: cargo build --release --features=simd
+      install: choco install -y opencl-intel-cpu-runtime 
     - os: osx
-      script:
-        - cargo build --release --features=simd
-        - cargo build --release --features=opencl,simd # gpu build requires OpenCL, only osx has it
+      
+script:
+  - cargo build --release --features=simd
+  - cargo build --release --features=opencl,simd
