@@ -19,5 +19,10 @@ matrix:
     - os: windows
     - os: osx
 
-script:
-  - cargo build --release --features=opencl,simd
+jobs:
+  include:
+    - stage: cpu-only
+      script: cargo build --release --features=simd
+    - stage: cpu-gpu
+      if: os = osx # gpu build requires OpenCL, only osx has it
+      script: cargo build --release --features=opencl,simd
