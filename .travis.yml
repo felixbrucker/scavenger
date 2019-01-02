@@ -33,6 +33,7 @@ script:
       mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only"
     fi
 
+    ls -lah output/ || dir output
     if [[ "$SKIP_GPU" = "1" ]]; then
       return 0;
     fi
