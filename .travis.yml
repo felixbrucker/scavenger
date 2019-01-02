@@ -14,12 +14,12 @@ matrix:
              - ubuntu-toolchain-r-test
            packages:
             - g++-7
-            - opencl-headers
+            - ocl-icd-opencl-dev
       env:
         - CC=gcc-7
         - CXX=g++-7
     - os: windows
-      install: choco install -y opencl-intel-cpu-runtime 
+      script: cargo build --release --features=simd
     - os: osx
       
 script:
