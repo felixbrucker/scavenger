@@ -1,11 +1,6 @@
 language: rust
 rust:
   - nightly
-  
-os:
-  - windows
-  - linux
-  - osx
 
 matrix:
   include:
@@ -21,6 +16,8 @@ matrix:
       env:
         - CC=gcc-7
         - CXX=g++-7
+    - os: windows
+    - os: osx
 
 script:
   - cargo build --release --features=opencl,simd
