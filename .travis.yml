@@ -25,24 +25,21 @@ matrix:
 
 script:
   - |
-    mkdir output
-    mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe" || echo "no win"
     cargo build --release --features=simd
+    mkdir output
     if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then
-      move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
+      mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
     else
       mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only"
     fi
 
-    ls -lah output/ || dir output
-    ls -lah target/release/ || dir target/release/
     if [[ "$SKIP_GPU" = "1" ]]; then
       return 0;
     fi
 
     cargo build --release --features=opencl,simd
     if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then
-      move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
+      mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
     else
       mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu"
     fi
