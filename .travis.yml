@@ -1,6 +1,7 @@
 language: rust
 rust:
   - nightly
+cache: cargo
 
 matrix:
   include:
