@@ -14,7 +14,7 @@ matrix:
              - ubuntu-toolchain-r-test
            packages:
             - g++-7
-            - ocl-icd-opencl-dev
+            - opencl-headers
       env:
         - CC=gcc-7
         - CXX=g++-7
