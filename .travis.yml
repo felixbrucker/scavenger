@@ -19,9 +19,28 @@ matrix:
         - CC=gcc-7
         - CXX=g++-7
     - os: windows
-      script: cargo build --release --features=simd
+      env:
+        - SKIP_GPU=1
     - os: osx
-      
+
 script:
-  - cargo build --release --features=simd
-  - cargo build --release --features=opencl,simd
+  - |
+    cargo build --release --features=simd
+    mkdir output
+    mv target/**/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only" || mv target/**/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
+    if [[ "$SKIP_GPU" = "1" ]]; then
+      exit 0;
+    fi
+
+    cargo build --release --features=opencl,simd
+    mv target/**/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu" || mv target/**/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "locDt5bv+KHLK9i75dqny2vhiONkkZV3gTe7xGQBnY8EkvCb313z+Jq92fyx6IoPvuAri9UxkFJGyLcbZkNtnS4iPHuNPEFm9MMK8rRTBXZ9ns8QmU4Vi/dNamd2zFu8LhfdbY79NsV+C56RHNl9AiMfchDIlkNsYF5lQTUKm3gtLcLct6hEACJtibq1a3LJ1qdCxW4ryxP88kARVEHr/6kDD68Y6MSaP2lx7J3/i6Li6Rq6I6iaAefBVHiVgnS5PTbFxbs3xJF1toNUWWq0sIpDe0TK8VY4zXW8w6ktgvjq84XKthWsO3fGYhF5xCJTl7KqsRyBiZyL9JukepCuqbGhliBNSExJV5axG+dKU+YnMwHSovp/abObMQuTn/zmMUS6O4Wcz8iYyKTjhvhda9o9aqfuPSyjdIcPXJjHz+smMk4Vpw/HTHMHNEPyzjfFfjcAd7rLFeCbhb7DAFMWuPuxoxgPZ/f6W5goh4RlV2j+/B6gevzIYLoccu1rYWzRyqjS4SuX/6MFTrDfqnx5OPUa3YDFBrY0v0wDM8dZ+xL5RqUilcCw3Lzls6dZl9XWyoEMx3QXORHd/VR/Xt00PELHHz4Lom3WsKtA1JvqNN55y0dTIeXpoFqI3gynhpRkV8yhUSacSsoJj3F9RLaiSQsCZpXuMzop6rxpwCedpiI="
+  file_glob: true
+  file: output/*
+  skip_cleanup: true
+  on:
+    tags: true
