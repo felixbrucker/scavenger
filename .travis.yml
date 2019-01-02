@@ -26,16 +26,14 @@ matrix:
 script:
   - |
     cargo build --release --features=simd
-    ls -lah target/
-    ls -lah target/**/
     mkdir output
-    mv target/**/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only" || mv target/**/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
+    mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only" || mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
     if [[ "$SKIP_GPU" = "1" ]]; then
       exit 0;
     fi
 
     cargo build --release --features=opencl,simd
-    mv target/**/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu" || mv target/**/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
+    mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu" || mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
 
 deploy:
   provider: releases
