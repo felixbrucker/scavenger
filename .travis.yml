@@ -28,9 +28,9 @@ script:
     cargo build --release --features=simd
     mkdir output
     if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then
-      move target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only" || move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
+      move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
     else
-      mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only" || mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
+      mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-only"
     fi
 
     if [[ "$SKIP_GPU" = "1" ]]; then
@@ -39,9 +39,9 @@ script:
 
     cargo build --release --features=opencl,simd
     if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then
-      move target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu" || move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
+      move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
     else
-      mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu" || mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu.exe"
+      mv target/release/scavenger "output/scavenger-$TRAVIS_OS_NAME-cpu-gpu"
     fi
 
 deploy:
