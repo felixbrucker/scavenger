@@ -14,10 +14,13 @@ matrix:
              - ubuntu-toolchain-r-test
            packages:
             - g++-7
+            - ocl-icd-opencl-dev
       env:
         - CC=gcc-7
         - CXX=g++-7
-      script: cargo build --release --features=simd
+      script:
+        - cargo build --release --features=simd
+        - cargo build --release --features=opencl,simd
     - os: windows
       script: cargo build --release --features=simd
     - os: osx
