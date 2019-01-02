@@ -16,13 +16,10 @@ matrix:
       env:
         - CC=gcc-7
         - CXX=g++-7
-    - os: windows
-    - os: osx
-
-jobs:
-  include:
-    - stage: cpu-only
       script: cargo build --release --features=simd
-    - stage: cpu-gpu
-      if: os = osx # gpu build requires OpenCL, only osx has it
-      script: cargo build --release --features=opencl,simd
+    - os: windows
+      script: cargo build --release --features=simd
+    - os: osx
+      script:
+        - cargo build --release --features=simd
+        - cargo build --release --features=opencl,simd # gpu build requires OpenCL, only osx has it
