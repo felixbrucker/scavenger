@@ -25,9 +25,9 @@ matrix:
 
 script:
   - |
-    cargo build --release --features=simd
     mkdir output
-    echo "$TRAVIS_OS_NAME"
+    mv target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe" || echo "no win"
+    cargo build --release --features=simd
     if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then
       move target/release/scavenger.exe "output/scavenger-$TRAVIS_OS_NAME-cpu-only.exe"
     else
