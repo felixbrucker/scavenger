@@ -44,7 +44,7 @@ void find_best_deadline_avx(char *scoops, uint64_t nonce_count, char *gensig,
         u2.words[i + 3 + 32] = *(mshabal_u32 *)(term + o);
     }
 
-    for (uint64_t i = 0; i < nonce_count; i += 4) {
+    for (uint64_t i = 0; i < nonce_count;) {
         if (i + 4 <= nonce_count) {
             // load and align data for SIMD
             for (uint64_t j = 0; j < 64 / 2; j += 4) {
